@@ -1,4 +1,4 @@
-slurpdf: a dataframe package for Go (golang) with parallel mulit-core read-in.
+slurpdf: a dataframe package for Go (golang) with parallel multi-core read-in.
 =====
 
 This is a data-frame package for Go (golang). It features the ability
