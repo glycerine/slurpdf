@@ -71,3 +71,9 @@ See slurpdf_test.go for this test code, which gives example use:
 		cv.So(yy, cv.ShouldResemble, em[xi0][yj:(yj+1)])
 
 ~~~
+
+-------------
+
+Copyright (C) 2024 by Jason E. Aten, Ph.D.
+
+License: MIT
