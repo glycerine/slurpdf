@@ -3,7 +3,8 @@ package slurpdf
 import (
 	"fmt"
 	//"math"
-	//"os"
+	"io"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -99,6 +100,13 @@ func Test001_slurp_in_data(t *testing.T) {
 		cv.ShouldResemble(xx, em[xi0][xj0:xj1])
 		cv.ShouldResemble(yy, em[xi0][yj:(yj+1)])
 
+		// demonstrate output back to cvs file.
+		path := "test.output.csv"
+		panicOn(d.Disgorge(path))
+		fmt.Printf("\nwrote SlurpDataFrame d as csv file to path='%v'; it is:\n", path)
+		f, err := os.Open(path)
+		panicOn(err)
+		io.Copy(os.Stdout, f)
 	})
 
 }
