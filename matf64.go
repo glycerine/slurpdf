@@ -1,4 +1,4 @@
-package vft
+package slurpdf
 
 import (
 	"fmt"
@@ -46,7 +46,7 @@ type MatrixFloat64 struct {
 	rowbuffer []float64
 }
 
-// VolVec is a column vector; a Matrix has an
+// ColVec is a column vector; a Matrix has an
 // alternative internal data structure as an
 // list of ColVec, just like an R dataframe. This
 // allows for zero copy ExtractRowsColsAsMatrix.
