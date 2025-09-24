@@ -18,7 +18,7 @@ var cv = &smallConvey{}
 
 func (s *smallConvey) AssertTrue(expr bool) {
 	if !expr {
-		panic(fmt.Sprintf("assertion false at %v", FileLine(2)))
+		panic(fmt.Sprintf("assertion false at %v", fileLine(2)))
 	}
 }
 
@@ -28,7 +28,7 @@ func (s *smallConvey) Convey(desc string, t *testing.T, f func()) {
 }
 func (s *smallConvey) ShouldResemble(a, b any) {
 	if !reflect.DeepEqual(a, b) {
-		panic(fmt.Sprintf("ShouldResemble false at %v", FileLine(2)))
+		panic(fmt.Sprintf("ShouldResemble false at %v", fileLine(2)))
 	}
 }
 

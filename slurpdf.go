@@ -620,11 +620,11 @@ func (df *SlurpDataFrame) FindTm(tm time.Time, si time.Duration) (rowi int, err 
 	})
 	if k == df.Nrow {
 		return -2, fmt.Errorf("could not FindTm(tm='%v'); it appears to be after all our tm. our data frame has '%v' to '%v'",
-			tm.In(GTZ), df.Tm[0].In(GTZ), df.Tm[len(df.Tm)-1].In(GTZ))
+			tm.In(gtz), df.Tm[0].In(gtz), df.Tm[len(df.Tm)-1].In(gtz))
 	}
 	if k == 0 {
 		return -1, fmt.Errorf("could not FindTm(tm='%v'); it appears to be before all our tm. our data frame has '%v' to '%v'",
-			tm.In(GTZ), df.Tm[0].In(GTZ), df.Tm[len(df.Tm)-1].In(GTZ))
+			tm.In(gtz), df.Tm[0].In(gtz), df.Tm[len(df.Tm)-1].In(gtz))
 	}
 	return k - 1, nil
 }

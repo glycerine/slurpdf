@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-func FileExists(name string) bool {
+func fileExists(name string) bool {
 	fi, err := os.Stat(name)
 	if err != nil {
 		return false
@@ -15,7 +15,7 @@ func FileExists(name string) bool {
 	return true
 }
 
-func DirExists(name string) bool {
+func dirExists(name string) bool {
 	fi, err := os.Stat(name)
 	if err != nil {
 		return false
@@ -26,7 +26,7 @@ func DirExists(name string) bool {
 	return false
 }
 
-func FileSize(name string) (int64, error) {
+func fileSize(name string) (int64, error) {
 	fi, err := os.Stat(name)
 	if err != nil {
 		return -1, err

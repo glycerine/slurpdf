@@ -99,7 +99,7 @@ func CsvShowMain() {
 	fn := os.Args[1]
 	if fn == "-" {
 		// don't check file
-	} else if !FileExists(fn) {
+	} else if !fileExists(fn) {
 		fmt.Fprintf(os.Stderr, "error: inspecting '%s' impossible as it does not exist.", fn)
 		os.Exit(1)
 	}
@@ -127,7 +127,7 @@ func CsvShowMain() {
 
 		headerFrom = os.Args[headerpos+1]
 		//fmt.Printf("\n using headerFrom = '%s'\n", headerFrom)
-		if !FileExists(headerFrom) {
+		if !fileExists(headerFrom) {
 			fmt.Fprintf(os.Stderr, "error: -header from '%s' failed "+
 				"as that path is not a existing file.", headerFrom)
 			os.Exit(1)

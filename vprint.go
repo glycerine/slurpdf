@@ -14,8 +14,9 @@ import (
 	//"4d63.com/tz"
 )
 
-var GTZ *time.Location
-var Chicago *time.Location
+var gtz *time.Location
+var utc *time.Location
+var chicago *time.Location
 
 func init() {
 
@@ -24,19 +25,18 @@ func init() {
 
 	var err error
 	//Chicago, err = tz.LoadLocation("America/Chicago")
-	Chicago, err = time.LoadLocation("America/Chicago")
+	utc, err = time.LoadLocation("UTC")
 	panicOn(err)
-	GTZ = Chicago
+	chicago, err = time.LoadLocation("America/Chicago")
+	panicOn(err)
+	//gtz = utc
+	gtz = chicago
 }
 
 const RFC3339MsecTz0 = "2006-01-02T15:04:05.000Z07:00"
 
 // for tons of debug output
-var VerboseVerbose bool = false
-
-// convience functions for . import
-var pp = PP
-var vv = VV
+var verboseVerbose bool = false
 
 func panicOn(err error) {
 	if err != nil {
@@ -44,27 +44,27 @@ func panicOn(err error) {
 	}
 }
 
-func PP(format string, a ...interface{}) {
-	if VerboseVerbose {
-		TSPrintf(format, a...)
+func pp(format string, a ...interface{}) {
+	if verboseVerbose {
+		tsPrintf(format, a...)
 	}
 }
 
-func VV(format string, a ...interface{}) {
-	TSPrintf(format, a...)
+func vv(format string, a ...interface{}) {
+	tsPrintf(format, a...)
 }
 
-func AlwaysPrintf(format string, a ...interface{}) {
-	TSPrintf(format, a...)
+func alwaysPrintf(format string, a ...interface{}) {
+	tsPrintf(format, a...)
 }
 
 var tsPrintfMut sync.Mutex
 
 // time-stamped printf
-func TSPrintf(format string, a ...interface{}) {
+func tsPrintf(format string, a ...interface{}) {
 	tsPrintfMut.Lock()
-	Printf("\n%s %s ", FileLine(3), ts())
-	Printf(format+"\n", a...)
+	printf("\n%s %s ", fileLine(3), ts())
+	printf(format+"\n", a...)
 	tsPrintfMut.Unlock()
 }
 
@@ -74,15 +74,15 @@ func ts() string {
 }
 
 // so we can multi write easily, use our own printf
-var OurStdout io.Writer = os.Stdout
+var ourStdout io.Writer = os.Stdout
 
 // Printf formats according to a format specifier and writes to standard output.
 // It returns the number of bytes written and any write error encountered.
-func Printf(format string, a ...interface{}) (n int, err error) {
-	return fmt.Fprintf(OurStdout, format, a...)
+func printf(format string, a ...interface{}) (n int, err error) {
+	return fmt.Fprintf(ourStdout, format, a...)
 }
 
-func FileLine(depth int) string {
+func fileLine(depth int) string {
 	_, fileName, fileLine, ok := runtime.Caller(depth)
 	var s string
 	if ok {
@@ -93,7 +93,7 @@ func FileLine(depth int) string {
 	return s
 }
 
-func Caller(upStack int) string {
+func caller(upStack int) string {
 	// elide ourself and runtime.Callers
 	target := upStack + 2
 
