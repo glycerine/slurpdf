@@ -7,13 +7,11 @@ import (
 	"path"
 	"runtime"
 	"runtime/debug"
-	"runtime/pprof"
+	//"runtime/pprof"
 	"sync"
 	"time"
-
-	"github.com/glycerine/cryrand"
-
-	"4d63.com/tz"
+	//"github.com/glycerine/cryrand"
+	//"4d63.com/tz"
 )
 
 var GTZ *time.Location
@@ -25,7 +23,8 @@ func init() {
 	os.Setenv("TZ", "America/Chicago")
 
 	var err error
-	Chicago, err = tz.LoadLocation("America/Chicago")
+	//Chicago, err = tz.LoadLocation("America/Chicago")
+	Chicago, err = time.LoadLocation("America/Chicago")
 	panicOn(err)
 	GTZ = Chicago
 }
@@ -117,6 +116,7 @@ func Caller(upStack int) string {
 	return f.Function
 }
 
+/*
 func startProfilingCPU(path string) {
 	// add randomness so two tests run at once don't overwrite each other.
 	rnd8 := cryrand.RandomStringWithUp(8)
@@ -127,6 +127,7 @@ func startProfilingCPU(path string) {
 
 	pprof.StartCPUProfile(f)
 }
+*/
 
 func stack() string {
 	return string(debug.Stack())

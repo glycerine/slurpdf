@@ -1,15 +1,36 @@
 package slurpdf
 
 import (
-	//"fmt"
+	"fmt"
 	//"math"
 	//"os"
+	"reflect"
 	"strings"
 	"testing"
 	"time"
-
-	cv "github.com/glycerine/goconvey/convey"
+	//cv "github.com/glycerine/goconvey/convey"
 )
+
+// fewer dependencies
+type smallConvey struct{}
+
+var cv = &smallConvey{}
+
+func (s *smallConvey) AssertTrue(expr bool) {
+	if !expr {
+		panic(fmt.Sprintf("assertion false at %v", FileLine(2)))
+	}
+}
+
+func (s *smallConvey) Convey(desc string, t *testing.T, f func()) {
+	//fmt.Printf("%v\n", desc)
+	f()
+}
+func (s *smallConvey) ShouldResemble(a, b any) {
+	if !reflect.DeepEqual(a, b) {
+		panic(fmt.Sprintf("ShouldResemble false at %v", FileLine(2)))
+	}
+}
 
 func Test001_slurp_in_data(t *testing.T) {
 
@@ -45,10 +66,10 @@ func Test001_slurp_in_data(t *testing.T) {
 			[]float64{1.136364617767486, -3.13636348140514, -9.273116, 0},
 		}
 		_ = em
-		cv.So(d.Header, cv.ShouldResemble, strings.Join(eh, ","))
-		cv.So(d.Colnames, cv.ShouldResemble, eh)
+		cv.ShouldResemble(d.Header, strings.Join(eh, ","))
+		cv.ShouldResemble(d.Colnames, eh)
 		for i := range em {
-			cv.So(d.MatFullRow(i), cv.ShouldResemble, em[i])
+			cv.ShouldResemble(d.MatFullRow(i), em[i])
 		}
 
 		// ExtractCols
@@ -56,13 +77,13 @@ func Test001_slurp_in_data(t *testing.T) {
 		xi1 := 5
 		wcol := []int{1, 3}
 		n, nvar, xx, cn := d.ExtractCols(xi0, xi1, wcol)
-		cv.So(n == 2, cv.ShouldBeTrue)
-		cv.So(nvar == 2, cv.ShouldBeTrue)
-		cv.So(cn, cv.ShouldResemble, []string{"x2", "y"})
-		cv.So(xx[0], cv.ShouldResemble, em[3][1])
-		cv.So(xx[1], cv.ShouldResemble, em[3][3])
-		cv.So(xx[2], cv.ShouldResemble, em[4][1])
-		cv.So(xx[3], cv.ShouldResemble, em[4][3])
+		cv.AssertTrue(n == 2)
+		cv.AssertTrue(nvar == 2)
+		cv.ShouldResemble(cn, []string{"x2", "y"})
+		cv.ShouldResemble(xx[0], em[3][1])
+		cv.ShouldResemble(xx[1], em[3][3])
+		cv.ShouldResemble(xx[2], em[4][1])
+		cv.ShouldResemble(xx[3], em[4][3])
 
 		// ExtractXXYY
 		xi0 = 4
@@ -71,12 +92,12 @@ func Test001_slurp_in_data(t *testing.T) {
 		xj1 := 3
 		yj := 3 // and the target
 		n, nvar, xx, yy, colnames, targetname := d.ExtractXXYY(xi0, xi1, xj0, xj1, yj)
-		cv.So(n == 1, cv.ShouldBeTrue)
-		cv.So(nvar == 1, cv.ShouldBeTrue)
-		cv.So(colnames, cv.ShouldResemble, []string{"x3"})
-		cv.So(targetname, cv.ShouldResemble, "y")
-		cv.So(xx, cv.ShouldResemble, em[xi0][xj0:xj1])
-		cv.So(yy, cv.ShouldResemble, em[xi0][yj:(yj+1)])
+		cv.AssertTrue(n == 1)
+		cv.AssertTrue(nvar == 1)
+		cv.ShouldResemble(colnames, []string{"x3"})
+		cv.ShouldResemble(targetname, "y")
+		cv.ShouldResemble(xx, em[xi0][xj0:xj1])
+		cv.ShouldResemble(yy, em[xi0][yj:(yj+1)])
 
 	})
 
